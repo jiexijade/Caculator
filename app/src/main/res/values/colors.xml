@@ -2,4 +2,10 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <!-- 导航抽屉：参考图风格，白底、浅灰字、淡蓝选中 -->
+    <color name="nav_drawer_bg">#FFFFFF</color>
+    <color name="nav_section_text">#9E9E9E</color>
+    <color name="nav_item_text">#616161</color>
+    <color name="nav_item_selected_bg">#E3F2FD</color>
+    <color name="nav_icon_tint">#757575</color>
 </resources>

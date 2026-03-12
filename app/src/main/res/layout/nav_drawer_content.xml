@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/nav_drawer_bg"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="16dp"
+        android:paddingBottom="24dp">
+
+        <!-- 计算器 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/nav_item_padding_horizontal"
+            android:paddingEnd="@dimen/nav_item_padding_horizontal"
+            android:paddingTop="@dimen/nav_section_padding_top"
+            android:paddingBottom="@dimen/nav_section_padding_bottom"
+            android:text="计算器"
+            android:textColor="@color/nav_section_text"
+            android:textSize="@dimen/nav_section_text_size"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/navItemBasicCalc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/nav_item_padding_horizontal"
+            android:paddingEnd="@dimen/nav_item_padding_horizontal"
+            android:paddingTop="@dimen/nav_item_padding_vertical"
+            android:paddingBottom="@dimen/nav_item_padding_vertical"
+            android:background="@drawable/bg_nav_item_selector"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_nav_calculator"
+                android:contentDescription="@null" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="16dp"
+                android:text="标准"
+                android:textColor="@color/nav_item_text"
+                android:textSize="@dimen/nav_item_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navItemComplexCalc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/nav_item_padding_horizontal"
+            android:paddingEnd="@dimen/nav_item_padding_horizontal"
+            android:paddingTop="@dimen/nav_item_padding_vertical"
+            android:paddingBottom="@dimen/nav_item_padding_vertical"
+            android:background="@drawable/bg_nav_item_selector"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_nav_science"
+                android:contentDescription="@null" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="16dp"
+                android:text="科学"
+                android:textColor="@color/nav_item_text"
+                android:textSize="@dimen/nav_item_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navItemLoan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/nav_item_padding_horizontal"
+            android:paddingEnd="@dimen/nav_item_padding_horizontal"
+            android:paddingTop="@dimen/nav_item_padding_vertical"
+            android:paddingBottom="@dimen/nav_item_padding_vertical"
+            android:background="@drawable/bg_nav_item_selector"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_nav_loan"
+                android:contentDescription="@null" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="16dp"
+                android:text="房贷/车贷"
+                android:textColor="@color/nav_item_text"
+                android:textSize="@dimen/nav_item_text_size" />
+        </LinearLayout>
+
+        <!-- 转换器 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/nav_item_padding_horizontal"
+            android:paddingEnd="@dimen/nav_item_padding_horizontal"
+            android:paddingTop="@dimen/nav_section_padding_top"
+            android:paddingBottom="@dimen/nav_section_padding_bottom"
+            android:text="转换器"
+            android:textColor="@color/nav_section_text"
+            android:textSize="@dimen/nav_section_text_size"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/navItemCurrency"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/nav_item_padding_horizontal"
+            android:paddingEnd="@dimen/nav_item_padding_horizontal"
+            android:paddingTop="@dimen/nav_item_padding_vertical"
+            android:paddingBottom="@dimen/nav_item_padding_vertical"
+            android:background="@drawable/bg_nav_item_selector"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_nav_currency"
+                android:contentDescription="@null" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="16dp"
+                android:text="货币"
+                android:textColor="@color/nav_item_text"
+                android:textSize="@dimen/nav_item_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navItemLength"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/nav_item_padding_horizontal"
+            android:paddingEnd="@dimen/nav_item_padding_horizontal"
+            android:paddingTop="@dimen/nav_item_padding_vertical"
+            android:paddingBottom="@dimen/nav_item_padding_vertical"
+            android:background="@drawable/bg_nav_item_selector"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_nav_length"
+                android:contentDescription="@null" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="16dp"
+                android:text="长度"
+                android:textColor="@color/nav_item_text"
+                android:textSize="@dimen/nav_item_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navItemSpeed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/nav_item_padding_horizontal"
+            android:paddingEnd="@dimen/nav_item_padding_horizontal"
+            android:paddingTop="@dimen/nav_item_padding_vertical"
+            android:paddingBottom="@dimen/nav_item_padding_vertical"
+            android:background="@drawable/bg_nav_item_selector"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_nav_speed"
+                android:contentDescription="@null" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="16dp"
+                android:text="速度"
+                android:textColor="@color/nav_item_text"
+                android:textSize="@dimen/nav_item_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navItemWeight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/nav_item_padding_horizontal"
+            android:paddingEnd="@dimen/nav_item_padding_horizontal"
+            android:paddingTop="@dimen/nav_item_padding_vertical"
+            android:paddingBottom="@dimen/nav_item_padding_vertical"
+            android:background="@drawable/bg_nav_item_selector"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_nav_weight"
+                android:contentDescription="@null" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="16dp"
+                android:text="重量"
+                android:textColor="@color/nav_item_text"
+                android:textSize="@dimen/nav_item_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navItemData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/nav_item_padding_horizontal"
+            android:paddingEnd="@dimen/nav_item_padding_horizontal"
+            android:paddingTop="@dimen/nav_item_padding_vertical"
+            android:paddingBottom="@dimen/nav_item_padding_vertical"
+            android:background="@drawable/bg_nav_item_selector"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_nav_data"
+                android:contentDescription="@null" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="16dp"
+                android:text="数据"
+                android:textColor="@color/nav_item_text"
+                android:textSize="@dimen/nav_item_text_size" />
+        </LinearLayout>
+
+        <!-- 设置 -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:background="#E0E0E0" />
+
+        <LinearLayout
+            android:id="@+id/navItemSettings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/nav_item_padding_horizontal"
+            android:paddingEnd="@dimen/nav_item_padding_horizontal"
+            android:paddingTop="@dimen/nav_item_padding_vertical"
+            android:paddingBottom="@dimen/nav_item_padding_vertical"
+            android:background="@drawable/bg_nav_item_selector"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_nav_settings"
+                android:contentDescription="@null" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="16dp"
+                android:text="设置"
+                android:textColor="@color/nav_item_text"
+                android:textSize="@dimen/nav_item_text_size" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

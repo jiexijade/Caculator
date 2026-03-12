@@ -11,15 +11,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Calculator">
+
+        <!-- 主入口：基本计算器（带导航抽屉） -->
         <activity
-            android:name=".MainActivity"
+            android:name=".CalculatorActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".ComplexCalculatorActivity" android:exported="false" />
+        <activity android:name=".LoanCalculatorActivity" android:exported="false" />
+        <activity android:name=".CurrencyCalculatorActivity" android:exported="false" />
+        <activity android:name=".LengthConverterActivity" android:exported="false" />
+        <activity android:name=".SpeedConverterActivity" android:exported="false" />
+        <activity android:name=".WeightConverterActivity" android:exported="false" />
+        <activity android:name=".DataConverterActivity" android:exported="false" />
     </application>
 
 </manifest>
