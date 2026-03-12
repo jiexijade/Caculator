@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F8F9FA">
+
+    <!-- 1. 顶部高级感标题栏 (与复数计算器完全统一) -->
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#FFFFFF"
+        app:navigationIcon="@drawable/ic_menu"
+        app:contentInsetStartWithNavigation="8dp"
+        android:elevation="2dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingEnd="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="计算器"
+                android:textColor="#2C3E50"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:text="货币转换"
+                android:textColor="#7F8C8D"
+                android:textSize="14sp" />
+        </RelativeLayout>
+    </androidx.appcompat.widget.Toolbar>
+
+    <!-- 2. 可滚动的上半部分 (汇率信息区) -->
+    <!-- layout_height="0dp" 和 layout_weight="1" 保证它占满除键盘外的所有剩余空间，并支持内部滚动 -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:clipToPadding="false"
+        android:paddingTop="16dp"
+        android:paddingHorizontal="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- 汇率转换卡片 -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="#FFFFFF">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <!-- 美元输入 -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="美国 - 美元"
+                        android:textSize="14sp"
+                        android:textColor="#7F8C8D"
+                        android:layout_marginBottom="4dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="20dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="$"
+                            android:textSize="28sp"
+                            android:textColor="#2C3E50"
+                            android:textStyle="bold"
+                            android:layout_marginEnd="8dp" />
+
+                        <EditText
+                            android:id="@+id/etUSD"
+                            android:layout_width="0dp"
+                            android:layout_height="56dp"
+                            android:layout_weight="1"
+                            android:text="0"
+                            android:textSize="28sp"
+                            android:textColor="#2C3E50"
+                            android:inputType="numberDecimal"
+                            android:background="@null" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#F0F2F5"
+                        android:layout_marginBottom="20dp" />
+
+                    <!-- 欧元输入 -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="欧洲 - 欧元"
+                        android:textSize="14sp"
+                        android:textColor="#7F8C8D"
+                        android:layout_marginBottom="4dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="12dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="€"
+                            android:textSize="28sp"
+                            android:textColor="#2C3E50"
+                            android:textStyle="bold"
+                            android:layout_marginEnd="8dp" />
+
+                        <EditText
+                            android:id="@+id/etEUR"
+                            android:layout_width="0dp"
+                            android:layout_height="56dp"
+                            android:layout_weight="1"
+                            android:text="0"
+                            android:textSize="28sp"
+                            android:textColor="#2C3E50"
+                            android:inputType="numberDecimal"
+                            android:background="@null" />
+                    </LinearLayout>
+
+                    <!-- 汇率信息 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="16dp">
+
+                        <TextView
+                            android:id="@+id/tvExchangeRate"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="1 USD = 0.8647 EUR"
+                            android:textSize="14sp"
+                            android:textColor="#7F8C8D" />
+
+                        <TextView
+                            android:id="@+id/tvUpdateTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="已更新 2026/3/9 20:30"
+                            android:textSize="12sp"
+                            android:textColor="#788CA1" />
+                    </LinearLayout>
+
+                    <!-- 更新汇率按钮 (采用主题统一的深灰蓝色与无阴影设计) -->
+                    <Button
+                        android:id="@+id/btnUpdateRate"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:text="更新汇率"
+                        android:textSize="16sp"
+                        android:textColor="#FFFFFF"
+                        android:background="@drawable/btn_eq_premium"
+                        app:backgroundTint="@null"
+                        android:stateListAnimator="@null" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- 3. 固定的下半部分 (数字键盘区) -->
+    <!-- 移出 ScrollView，它将永久固定在屏幕底部 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="16dp"
+        android:paddingBottom="16dp">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="#F5F6F8">
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="3"
+                android:rowCount="4"
+                android:padding="12dp">
+
+                <!-- 第一行：7, 8, 9 -->
+                <Button
+                    android:id="@+id/btnCurrency7"
+                    android:layout_width="0dp"
+                    android:layout_height="64dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="6dp"
+                    android:text="7"
+                    android:textSize="26sp"
+                    android:textColor="#3D4045"
+                    android:background="@drawable/btn_num_premium"
+                    app:backgroundTint="@null"
+                    android:stateListAnimator="@null" />
+
+                <Button
+                    android:id="@+id/btnCurrency8"
+                    android:layout_width="0dp"
+                    android:layout_height="64dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="6dp"
+                    android:text="8"
+                    android:textSize="26sp"
+                    android:textColor="#3D4045"
+                    android:background="@drawable/btn_num_premium"
+                    app:backgroundTint="@null"
+                    android:stateListAnimator="@null" />
+
+                <Button
+                    android:id="@+id/btnCurrency9"
+                    android:layout_width="0dp"
+                    android:layout_height="64dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="6dp"
+                    android:text="9"
+                    android:textSize="26sp"
+                    android:textColor="#3D4045"
+                    android:background="@drawable/btn_num_premium"
+                    app:backgroundTint="@null"
+                    android:stateListAnimator="@null" />
+
+                <!-- 第二行：4, 5, 6 -->
+                <Button
+                    android:id="@+id/btnCurrency4"
+                    android:layout_width="0dp"
+                    android:layout_height="64dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="6dp"
+                    android:text="4"
+                    android:textSize="26sp"
+                    android:textColor="#3D4045"
+                    android:background="@drawable/btn_num_premium"
+                    app:backgroundTint="@null"
+                    android:stateListAnimator="@null" />
+
+                <Button
+                    android:id="@+id/btnCurrency5"
+                    android:layout_width="0dp"
+                    android:layout_height="64dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="6dp"
+                    android:text="5"
+                    android:textSize="26sp"
+                    android:textColor="#3D4045"
+                    android:background="@drawable/btn_num_premium"
+                    app:backgroundTint="@null"
+                    android:stateListAnimator="@null" />
+
+                <Button
+                    android:id="@+id/btnCurrency6"
+                    android:layout_width="0dp"
+                    android:layout_height="64dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="6dp"
+                    android:text="6"
+                    android:textSize="26sp"
+                    android:textColor="#3D4045"
+                    android:background="@drawable/btn_num_premium"
+                    app:backgroundTint="@null"
+                    android:stateListAnimator="@null" />
+
+                <!-- 第三行：1, 2, 3 -->
+                <Button
+                    android:id="@+id/btnCurrency1"
+                    android:layout_width="0dp"
+                    android:layout_height="64dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="6dp"
+                    android:text="1"
+                    android:textSize="26sp"
+                    android:textColor="#3D4045"
+                    android:background="@drawable/btn_num_premium"
+                    app:backgroundTint="@null"
+                    android:stateListAnimator="@null" />
+
+                <Button
+                    android:id="@+id/btnCurrency2"
+                    android:layout_width="0dp"
+                    android:layout_height="64dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="6dp"
+                    android:text="2"
+                    android:textSize="26sp"
+                    android:textColor="#3D4045"
+                    android:background="@drawable/btn_num_premium"
+                    app:backgroundTint="@null"
+                    android:stateListAnimator="@null" />
+
+                <Button
+                    android:id="@+id/btnCurrency3"
+                    android:layout_width="0dp"
+                    android:layout_height="64dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="6dp"
+                    android:text="3"
+                    android:textSize="26sp"
+                    android:textColor="#3D4045"
+                    android:background="@drawable/btn_num_premium"
+                    app:backgroundTint="@null"
+                    android:stateListAnimator="@null" />
+
+                <!-- 第四行：. , 0, DEL -->
+                <Button
+                    android:id="@+id/btnCurrencyDot"
+                    android:layout_width="0dp"
+                    android:layout_height="64dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="6dp"
+                    android:text="."
+                    android:textSize="26sp"
+                    android:textColor="#3D4045"
+                    android:background="@drawable/btn_num_premium"
+                    app:backgroundTint="@null"
+                    android:stateListAnimator="@null" />
+
+                <Button
+                    android:id="@+id/btnCurrency0"
+                    android:layout_width="0dp"
+                    android:layout_height="64dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="6dp"
+                    android:text="0"
+                    android:textSize="26sp"
+                    android:textColor="#3D4045"
+                    android:background="@drawable/btn_num_premium"
+                    app:backgroundTint="@null"
+                    android:stateListAnimator="@null" />
+
+                <Button
+                    android:id="@+id/btnCurrencyDEL"
+                    android:layout_width="0dp"
+                    android:layout_height="64dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="6dp"
+                    android:text="DEL"
+                    android:textSize="20sp"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/btn_eq_premium"
+                    app:backgroundTint="@null"
+                    android:stateListAnimator="@null" />
+            </GridLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+</LinearLayout>

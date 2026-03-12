@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <!-- 极浅的冷灰色背景，区别于纯白卡片，营造高级的层次感 -->
+    <solid android:color="#F0F2F5" />
+
+    <!-- 圆角大小，与外层卡片的圆角相呼应 -->
+    <corners android:radius="12dp" />
+
+    <!-- 极细的微弱边界线，增加控件的精致感 -->
+    <stroke
+        android:width="1dp"
+        android:color="#E0E5EC" />
+</shape>

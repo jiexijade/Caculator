@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8F9FA">
+
+    <!-- 主界面内容 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#F8F9FA">
+
+        <!-- 顶部高级感标题栏 -->
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="#FFFFFF"
+            app:navigationIcon="@drawable/ic_menu"
+            app:contentInsetStartWithNavigation="8dp"
+            android:elevation="2dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingEnd="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="计算器"
+                    android:textColor="#2C3E50"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvMode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:text="标准模式"
+                    android:textColor="#7F8C8D"
+                    android:textSize="14sp" />
+            </RelativeLayout>
+        </androidx.appcompat.widget.Toolbar>
+
+        <!-- 显示区域 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.8"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:background="#FFFFFF"
+            android:layout_marginBottom="1dp">
+
+            <TextView
+                android:id="@+id/tvExpression"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="16sp"
+                android:textColor="#95A5A6"
+                android:gravity="end"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/tvResult"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="48sp"
+                android:textColor="#2C3E50"
+                android:textStyle="bold"
+                android:gravity="end"
+                android:maxLines="1"
+                android:ellipsize="end" />
+
+            <TextView
+                android:id="@+id/tvHexResult"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="HEX: 0"
+                android:textSize="14sp"
+                android:textColor="#16A085"
+                android:gravity="end"
+                android:layout_marginTop="4dp"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <!-- 键盘总容器 (包含 DEC/HEX行 + 数字键盘) -->
+        <!-- 将背景色和阴影提取到外层，让它们成为一个整体 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.5"
+            android:orientation="vertical"
+            android:background="#F5F6F8"
+            android:padding="6dp"
+            android:elevation="4dp">
+
+            <!-- DEC / HEX 切换行：高度权重为 1 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnDecimalMode"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_margin="6dp"
+                    android:text="DEC (十进制)"
+                    android:textColor="#5A6573"
+                    android:textSize="16sp"
+                    android:background="@drawable/btn_op_premium"
+                    app:backgroundTint="@null"
+                    android:stateListAnimator="@null"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"/>
+
+                <Button
+                    android:id="@+id/btnHexMode"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_margin="6dp"
+                    android:text="HEX (十六进制)"
+                    android:textColor="#5A6573"
+                    android:textSize="16sp"
+                    android:background="@drawable/btn_op_premium"
+                    app:backgroundTint="@null"
+                    android:stateListAnimator="@null"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"/>
+            </LinearLayout>
+
+            <!-- 数字键盘区域：高度权重为 6，刚好对应 6 行网格，确保每一行高度绝对一致 -->
+            <GridLayout
+                android:id="@+id/gridKeyboard"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="6"
+                android:columnCount="5"
+                android:rowCount="6">
+
+                <!-- 第一行：A, (, ), AC, DEL -->
+                <Button android:text="A" android:textColor="#7A8490" android:background="@drawable/btn_hex_premium" app:backgroundTint="@null" style="@style/CalcPremiumBtn" />
+                <Button android:text="(" android:textColor="#5A6573" android:background="@drawable/btn_op_premium" app:backgroundTint="@null" style="@style/CalcPremiumBtn" />
+                <Button android:text=")" android:textColor="#5A6573" android:background="@drawable/btn_op_premium" app:backgroundTint="@null" style="@style/CalcPremiumBtn" />
+                <Button android:text="AC" android:textColor="#FFFFFF" android:background="@drawable/btn_eq_premium" app:backgroundTint="@null" style="@style/CalcPremiumBtn" />
+                <Button android:text="DEL" android:textColor="#FFFFFF" android:background="@drawable/btn_eq_premium" app:backgroundTint="@null" style="@style/CalcPremiumBtn" />
+
+                <!-- 第二行：B, <<, >>, %, ÷ -->
+                <Button android:text="B" android:textColor="#7A8490" android:background="@drawable/btn_hex_premium" app:backgroundTint="@null" style="@style/CalcPremiumBtn" />
+                <Button android:text="&lt;&lt;" android:textColor="#5A6573" android:background="@drawable/btn_op_premium" app:backgroundTint="@null" style="@style/CalcPremiumBtn" />
+                <Button android:text="&gt;&gt;" android:textColor="#5A6573" android:background="@drawable/btn_op_premium" app:backgroundTint="@null" style="@style/CalcPremiumBtn" />
+                <Button android:text="%" android:textColor="#5A6573" android:background="@drawable/btn_op_premium" app:backgroundTint="@null" style="@style/CalcPremiumBtn" />
+                <Button android:text="÷" android:textColor="#5A6573" android:background="@drawable/btn_op_premium" app:backgroundTint="@null" style="@style/CalcPremiumBtn" android:textSize="24sp" />
+
+                <!-- 第三行：C, 7, 8, 9, × -->
+                <Button android:text="C" android:textColor="#7A8490" android:background="@drawable/btn_hex_premium" app:backgroundTint="@null" style="@style/CalcPremiumBtn" />
+                <Button android:text="7" android:textColor="#3D4045" android:background="@drawable/btn_num_premium" app:backgroundTint="@null" style="@style/CalcPremiumBtn" android:textSize="26sp" />
+                <Button android:text="8" android:textColor="#3D4045" android:background="@drawable/btn_num_premium" app:backgroundTint="@null" style="@style/CalcPremiumBtn" android:textSize="26sp" />
+                <Button android:text="9" android:textColor="#3D4045" android:background="@drawable/btn_num_premium" app:backgroundTint="@null" style="@style/CalcPremiumBtn" android:textSize="26sp" />
+                <Button android:text="×" android:textColor="#5A6573" android:background="@drawable/btn_op_premium" app:backgroundTint="@null" style="@style/CalcPremiumBtn" android:textSize="24sp" />
+
+                <!-- 第四行：D, 4, 5, 6, - -->
+                <Button android:text="D" android:textColor="#7A8490" android:background="@drawable/btn_hex_premium" app:backgroundTint="@null" style="@style/CalcPremiumBtn" />
+                <Button android:text="4" android:textColor="#3D4045" android:background="@drawable/btn_num_premium" app:backgroundTint="@null" style="@style/CalcPremiumBtn" android:textSize="26sp" />
+                <Button android:text="5" android:textColor="#3D4045" android:background="@drawable/btn_num_premium" app:backgroundTint="@null" style="@style/CalcPremiumBtn" android:textSize="26sp" />
+                <Button android:text="6" android:textColor="#3D4045" android:background="@drawable/btn_num_premium" app:backgroundTint="@null" style="@style/CalcPremiumBtn" android:textSize="26sp" />
+                <Button android:text="-" android:textColor="#5A6573" android:background="@drawable/btn_op_premium" app:backgroundTint="@null" style="@style/CalcPremiumBtn" android:textSize="28sp" />
+
+                <!-- 第五行：E, 1, 2, 3, + -->
+                <Button android:text="E" android:textColor="#7A8490" android:background="@drawable/btn_hex_premium" app:backgroundTint="@null" style="@style/CalcPremiumBtn" />
+                <Button android:text="1" android:textColor="#3D4045" android:background="@drawable/btn_num_premium" app:backgroundTint="@null" style="@style/CalcPremiumBtn" android:textSize="26sp" />
+                <Button android:text="2" android:textColor="#3D4045" android:background="@drawable/btn_num_premium" app:backgroundTint="@null" style="@style/CalcPremiumBtn" android:textSize="26sp" />
+                <Button android:text="3" android:textColor="#3D4045" android:background="@drawable/btn_num_premium" app:backgroundTint="@null" style="@style/CalcPremiumBtn" android:textSize="26sp" />
+                <Button android:text="+" android:textColor="#5A6573" android:background="@drawable/btn_op_premium" app:backgroundTint="@null" style="@style/CalcPremiumBtn" android:textSize="24sp" />
+
+                <!-- 第六行：F, +/-, 0, ., = -->
+                <Button android:text="F" android:textColor="#7A8490" android:background="@drawable/btn_hex_premium" app:backgroundTint="@null" style="@style/CalcPremiumBtn" />
+                <Button android:text="+/-" android:textColor="#3D4045" android:background="@drawable/btn_num_premium" app:backgroundTint="@null" style="@style/CalcPremiumBtn" android:textSize="18sp" />
+                <Button android:text="0" android:textColor="#3D4045" android:background="@drawable/btn_num_premium" app:backgroundTint="@null" style="@style/CalcPremiumBtn" android:textSize="26sp" />
+                <Button android:text="." android:textColor="#3D4045" android:background="@drawable/btn_num_premium" app:backgroundTint="@null" style="@style/CalcPremiumBtn" android:textSize="26sp" />
+                <Button android:text="=" android:textColor="#FFFFFF" android:background="@drawable/btn_eq_premium" app:backgroundTint="@null" style="@style/CalcPremiumBtn" android:textSize="24sp" />
+
+            </GridLayout>
+        </LinearLayout>
+    </LinearLayout>
+</androidx.drawerlayout.widget.DrawerLayout>
