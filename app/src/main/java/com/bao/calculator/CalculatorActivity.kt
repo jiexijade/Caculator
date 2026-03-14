@@ -4,16 +4,30 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
+import android.widget.GridLayout
 
 class CalculatorActivity : AppCompatActivity() {
 
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navDrawer: View
     private var navItemBasicCalc: View? = null
+
+    // 计算器显示与状态
+    private lateinit var tvExpression: TextView
+    private lateinit var tvResult: TextView
+    private lateinit var tvHexResult: TextView
+    private lateinit var tvMode: TextView
+    private lateinit var gridKeyboard: GridLayout
+
+    private val currentExpression = StringBuilder()
+    private var isDecimalMode = true
+    private var justCalculated = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,11 +53,11 @@ class CalculatorActivity : AppCompatActivity() {
             drawerLayout.openDrawer(Gravity.START)
         }
 
-        // 当前是基本计算器，高亮“标准”
         navItemBasicCalc = findViewById(R.id.navItemBasicCalc)
         navItemBasicCalc?.isActivated = true
 
         setupNavClicks()
+        setupCalculator()
     }
 
     private fun setupNavClicks() {
@@ -77,6 +91,302 @@ class CalculatorActivity : AppCompatActivity() {
             Toast.makeText(this, "设置功能敬请期待", Toast.LENGTH_SHORT).show()
             drawerLayout.closeDrawer(Gravity.START)
         }
+    }
+
+    private fun setupCalculator() {
+        tvExpression = findViewById(R.id.tvExpression)
+        tvResult = findViewById(R.id.tvResult)
+        tvHexResult = findViewById(R.id.tvHexResult)
+        tvMode = findViewById(R.id.tvMode)
+        gridKeyboard = findViewById<GridLayout>(R.id.gridKeyboard)
+
+        findViewById<Button>(R.id.btnDecimalMode)?.setOnClickListener {
+            if (!isDecimalMode) {
+                isDecimalMode = true
+                tvMode.text = "标准模式"
+                tvHexResult.visibility = View.GONE
+                updateModeButtonState()
+                refreshDisplay()
+            }
+        }
+        findViewById<Button>(R.id.btnHexMode)?.setOnClickListener {
+            if (isDecimalMode) {
+                isDecimalMode = false
+                tvMode.text = "十六进制"
+                tvHexResult.visibility = View.VISIBLE
+                updateModeButtonState()
+                refreshDisplay()
+            }
+        }
+        updateModeButtonState()
+
+        for (i in 0 until gridKeyboard.childCount) {
+            val child = gridKeyboard.getChildAt(i)
+            if (child is Button) {
+                child.setOnClickListener { onKey(child.text.toString()) }
+            }
+        }
+        refreshDisplay()
+    }
+
+    private fun updateModeButtonState() {
+        findViewById<Button>(R.id.btnDecimalMode)?.isActivated = isDecimalMode
+        findViewById<Button>(R.id.btnHexMode)?.isActivated = !isDecimalMode
+    }
+
+    private fun onKey(key: String) {
+        when (key) {
+            "AC" -> {
+                currentExpression.clear()
+                tvResult.text = "0"
+                justCalculated = false
+            }
+            "DEL" -> {
+                if (currentExpression.isNotEmpty()) {
+                    currentExpression.deleteCharAt(currentExpression.length - 1)
+                    justCalculated = false
+                }
+            }
+            "=" -> {
+                if (currentExpression.isEmpty()) return
+                val result = evaluate(currentExpression.toString())
+                if (result != null) {
+                    val resultStr = if (isDecimalMode) formatDecimal(result) else result.toLong().toString(16).uppercase()
+                    tvResult.text = resultStr
+                    currentExpression.clear()
+                    currentExpression.append(resultStr)
+                    justCalculated = true
+                } else {
+                    tvResult.text = "错误"
+                }
+            }
+            "+/-" -> {
+                if (!isDecimalMode) return
+                toggleSign()
+                justCalculated = false
+            }
+            "DEC (十进制)", "HEX (十六进制)" -> return
+            else -> {
+                if (justCalculated) {
+                    when {
+                        key.length == 1 && key[0].isDigit() || key == "." || (key.length == 1 && key[0] in 'A'..'F') -> {
+                            currentExpression.clear()
+                            currentExpression.append(key)
+                        }
+                        key in listOf("+", "-", "×", "÷", "%", "(", ")", "<<", ">>") -> {
+                            currentExpression.clear()
+                            currentExpression.append(tvResult.text).append(key)
+                        }
+                        else -> return
+                    }
+                    justCalculated = false
+                } else {
+                    when {
+                        key in listOf("(", ")", "+", "-", "×", "÷", "%", "<<", ">>") -> currentExpression.append(key)
+                        key == "." -> { if (isDecimalMode) currentExpression.append(key) }
+                        key.length == 1 && key[0].isDigit() -> currentExpression.append(key)
+                        key.length == 1 && key[0] in 'A'..'F' -> { if (!isDecimalMode) currentExpression.append(key.uppercase()) }
+                        else -> currentExpression.append(key)
+                    }
+                }
+            }
+        }
+        refreshDisplay()
+    }
+
+    private fun toggleSign() {
+        val s = currentExpression.toString().trim()
+        if (s.isEmpty()) return
+        var i = s.length - 1
+        while (i >= 0 && (s[i].isDigit() || s[i] == '.')) i--
+        while (i >= 0 && (s[i] == '+' || s[i] == '-')) i--
+        val numStart = i + 1
+        if (numStart >= s.length) return
+        val num = s.substring(numStart, s.length)
+        if (num == "0" || num.isEmpty()) return
+        val prefix = s.substring(0, numStart)
+        val newNum = if (num.startsWith("-")) num.drop(1) else "-$num"
+        currentExpression.clear()
+        currentExpression.append(prefix).append(newNum)
+    }
+
+    private fun refreshDisplay() {
+        val expr = currentExpression.toString()
+        tvExpression.text = if (expr.isEmpty()) "0" else expr
+        if (!justCalculated && tvResult.text.toString() != "错误") {
+            tvResult.text = if (expr.isEmpty()) "0" else expr
+        }
+        if (!isDecimalMode && expr.isNotEmpty()) {
+            val result = evaluate(expr)
+            tvHexResult.text = "HEX: ${if (result != null) result.toLong().toString(16).uppercase() else "?"}"
+        } else {
+            tvHexResult.text = "HEX: 0"
+        }
+    }
+
+    private fun formatDecimal(d: Double): String {
+        return if (d == d.toLong().toDouble()) d.toLong().toString() else d.toString()
+    }
+
+    private fun evaluate(expr: String): Double? {
+        if (expr.isBlank()) return null
+        val s = expr.replace("×", "*").replace("÷", "/").replace(" ", "").trim()
+        if (s.isEmpty()) return null
+        return try {
+            if (isDecimalMode) evaluateDecimal(s) else evaluateHex(s)
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    private fun evaluateDecimal(s: String): Double {
+        val parser = object {
+            var i = 0
+            fun skipSpace() { while (i < s.length && s[i] == ' ') i++ }
+            fun parseNumber(): Double {
+                skipSpace()
+                if (i >= s.length) throw RuntimeException("expected number")
+                val start = i
+                if (s[i] == '-') { i++; if (i >= s.length) throw RuntimeException("expected number") }
+                while (i < s.length && (s[i].isDigit() || s[i] == '.')) i++
+                val sub = s.substring(start, i)
+                return sub.toDoubleOrNull() ?: throw RuntimeException("invalid number: $sub")
+            }
+            fun parseExpr(): Double {
+                var v = parseTerm()
+                while (i < s.length) {
+                    skipSpace()
+                    if (i >= s.length) break
+                    when (s[i]) {
+                        '+' -> { i++; v += parseTerm() }
+                        '-' -> { i++; v -= parseTerm() }
+                        else -> break
+                    }
+                }
+                return v
+            }
+            fun parseFactor(): Double {
+                skipSpace()
+                if (i >= s.length) throw RuntimeException("expected factor")
+                when (s[i]) {
+                    '(' -> {
+                        i++
+                        val v = parseExpr()
+                        skipSpace()
+                        if (i >= s.length || s[i] != ')') throw RuntimeException("expected )")
+                        i++
+                        return v
+                    }
+                    '-' -> { i++; return -parseFactor() }
+                    '+' -> { i++; return parseFactor() }
+                    else -> return parseNumber()
+                }
+            }
+            fun parseTerm(): Double {
+                var v = parseFactor()
+                while (i < s.length) {
+                    skipSpace()
+                    if (i >= s.length) break
+                    val op = when {
+                        s.startsWith("<<", i) -> { i += 2; "<<" }
+                        s.startsWith(">>", i) -> { i += 2; ">>" }
+                        s[i] == '*' -> { i++; "*" }
+                        s[i] == '/' -> { i++; "/" }
+                        s[i] == '%' -> { i++; "%" }
+                        else -> null
+                    } ?: break
+                    val b = parseFactor()
+                    v = when (op) {
+                        "*" -> v * b
+                        "/" -> if (b == 0.0) throw RuntimeException("divide by zero") else v / b
+                        "%" -> v % b
+                        "<<" -> (v.toLong() shl b.toInt().coerceIn(0, 63)).toDouble()
+                        ">>" -> (v.toLong() shr b.toInt().coerceIn(0, 63)).toDouble()
+                        else -> v
+                    }
+                }
+                return v
+            }
+        }
+        val result = parser.parseExpr()
+        parser.skipSpace()
+        if (parser.i != s.length) throw RuntimeException("unexpected")
+        return result
+    }
+
+    private fun evaluateHex(s: String): Double {
+        val parser = object {
+            var i = 0
+            fun skipSpace() { while (i < s.length && s[i] == ' ') i++ }
+            fun parseHexNumber(): Long {
+                skipSpace()
+                if (i >= s.length) throw RuntimeException("expected hex number")
+                val start = i
+                if (s[i] == '-') { i++; if (i >= s.length) throw RuntimeException("expected number") }
+                while (i < s.length && (s[i].isDigit() || s[i] in 'A'..'F' || s[i] in 'a'..'f')) i++
+                val sub = s.substring(start, i)
+                return sub.toLongOrNull(16) ?: throw RuntimeException("invalid hex: $sub")
+            }
+            fun parseExpr(): Long {
+                var v = parseTerm()
+                while (i < s.length) {
+                    skipSpace()
+                    if (i >= s.length) break
+                    when (s[i]) {
+                        '+' -> { i++; v += parseTerm() }
+                        '-' -> { i++; v -= parseTerm() }
+                        else -> break
+                    }
+                }
+                return v
+            }
+            fun parseFactor(): Long {
+                skipSpace()
+                if (i >= s.length) throw RuntimeException("expected factor")
+                when (s[i]) {
+                    '(' -> {
+                        i++
+                        val v = parseExpr()
+                        skipSpace()
+                        if (i >= s.length || s[i] != ')') throw RuntimeException("expected )")
+                        i++
+                        return v
+                    }
+                    '-' -> { i++; return -parseFactor() }
+                    '+' -> { i++; return parseFactor() }
+                    else -> return parseHexNumber()
+                }
+            }
+            fun parseTerm(): Long {
+                var v = parseFactor()
+                while (i < s.length) {
+                    skipSpace()
+                    if (i >= s.length) break
+                    val op = when {
+                        s.startsWith("<<", i) -> { i += 2; "<<" }
+                        s.startsWith(">>", i) -> { i += 2; ">>" }
+                        s[i] == '*' -> { i++; "*" }
+                        s[i] == '/' -> { i++; "/" }
+                        s[i] == '%' -> { i++; "%" }
+                        else -> null
+                    } ?: break
+                    val b = parseFactor()
+                    v = when (op) {
+                        "*" -> v * b
+                        "/" -> if (b == 0L) throw RuntimeException("divide by zero") else v / b
+                        "%" -> v % b
+                        "<<" -> v shl b.toInt().coerceIn(0, 63)
+                        ">>" -> v shr b.toInt().coerceIn(0, 63)
+                        else -> v
+                    }
+                }
+                return v
+            }
+        }
+        val result = parser.parseExpr()
+        parser.skipSpace()
+        if (parser.i != s.length) throw RuntimeException("unexpected")
+        return result.toDouble()
     }
 
     private fun clearNavSelection() {
