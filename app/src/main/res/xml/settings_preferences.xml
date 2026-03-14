@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory android:title="@string/settings_category_appearance">
+        <ListPreference
+            android:key="theme"
+            android:title="@string/settings_theme"
+            android:entries="@array/theme_entries"
+            android:entryValues="@array/theme_entry_values"
+            android:defaultValue="follow_system"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/settings_category_calculator">
+        <ListPreference
+            android:key="default_calc_mode"
+            android:title="@string/settings_default_calc_mode"
+            android:entries="@array/default_calc_mode_entries"
+            android:entryValues="@array/default_calc_mode_entry_values"
+            android:defaultValue="decimal"
+            app:useSimpleSummaryProvider="true" />
+        <ListPreference
+            android:key="decimal_places"
+            android:title="@string/settings_decimal_places"
+            android:entries="@array/decimal_places_entries"
+            android:entryValues="@array/decimal_places_entry_values"
+            android:defaultValue="6"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/settings_category_about">
+        <Preference
+            android:key="about"
+            android:title="@string/settings_about"
+            android:summary="@string/settings_about_summary" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

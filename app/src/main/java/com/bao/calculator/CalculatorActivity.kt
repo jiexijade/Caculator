@@ -5,12 +5,13 @@ import android.os.Bundle
 import android.view.Gravity
 import android.view.View
 import android.widget.Button
+import android.widget.GridLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
-import android.widget.GridLayout
+import androidx.preference.PreferenceManager
 import kotlin.math.sqrt
 
 class CalculatorActivity : AppCompatActivity() {
@@ -29,10 +30,18 @@ class CalculatorActivity : AppCompatActivity() {
     private val currentExpression = StringBuilder()
     private var isDecimalMode = true
     private var justCalculated = false
+    private var decimalPlaces = 6
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        applyThemeFromPreference()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calculator)
+
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        if (savedInstanceState == null) {
+            isDecimalMode = prefs.getString("default_calc_mode", "decimal") != "hex"
+        }
+        decimalPlaces = prefs.getString("decimal_places", "6")?.toIntOrNull() ?: 6
 
         drawerLayout = findViewById(R.id.drawerLayout)
         navDrawer = findViewById(R.id.navDrawer)
@@ -74,6 +83,11 @@ class CalculatorActivity : AppCompatActivity() {
         setupCalculator()
     }
 
+    override fun onResume() {
+        super.onResume()
+        decimalPlaces = PreferenceManager.getDefaultSharedPreferences(this).getString("decimal_places", "6")?.toIntOrNull() ?: 6
+    }
+
     private fun setupNavClicks() {
         findViewById<View>(R.id.navItemBasicCalc)?.setOnClickListener {
             clearNavSelection()
@@ -102,8 +116,8 @@ class CalculatorActivity : AppCompatActivity() {
             navTo(DataConverterActivity::class.java)
         }
         findViewById<View>(R.id.navItemSettings)?.setOnClickListener {
-            Toast.makeText(this, "设置功能敬请期待", Toast.LENGTH_SHORT).show()
             drawerLayout.closeDrawer(Gravity.START)
+            startActivity(Intent(this, SettingsActivity::class.java))
         }
     }
 
@@ -243,7 +257,22 @@ class CalculatorActivity : AppCompatActivity() {
     }
 
     private fun formatDecimal(d: Double): String {
-        return if (d == d.toLong().toDouble()) d.toLong().toString() else d.toString()
+        return if (d == d.toLong().toDouble() && d >= Long.MIN_VALUE && d <= Long.MAX_VALUE) {
+            d.toLong().toString()
+        } else {
+            "%.${decimalPlaces}f".format(d).trimEnd('0').trimEnd('.')
+        }
+    }
+
+    private fun applyThemeFromPreference() {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        val theme = prefs.getString("theme", "follow_system") ?: "follow_system"
+        val mode = when (theme) {
+            "light" -> AppCompatDelegate.MODE_NIGHT_NO
+            "dark" -> AppCompatDelegate.MODE_NIGHT_YES
+            else -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+        }
+        AppCompatDelegate.setDefaultNightMode(mode)
     }
 
     private fun evaluate(expr: String): Double? {

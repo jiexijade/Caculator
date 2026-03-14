@@ -4,4 +4,56 @@
         <item>房贷</item>
         <item>车贷</item>
     </string-array>
+
+    <!-- 设置页 -->
+    <string name="settings_title">设置</string>
+    <string name="settings_category_appearance">外观</string>
+    <string name="settings_category_calculator">计算器</string>
+    <string name="settings_category_about">关于</string>
+    <string name="settings_theme">主题</string>
+    <string name="settings_default_calc_mode">主计算器默认模式</string>
+    <string name="settings_decimal_places">结果小数位数</string>
+    <string name="settings_about">关于</string>
+    <string name="settings_about_summary">版本 %1$s</string>
+
+    <string-array name="theme_entries">
+        <item>跟随系统</item>
+        <item>浅色</item>
+        <item>深色</item>
+    </string-array>
+    <string-array name="theme_entry_values">
+        <item>follow_system</item>
+        <item>light</item>
+        <item>dark</item>
+    </string-array>
+
+    <string-array name="default_calc_mode_entries">
+        <item>标准（十进制）</item>
+        <item>十六进制</item>
+    </string-array>
+    <string-array name="default_calc_mode_entry_values">
+        <item>decimal</item>
+        <item>hex</item>
+    </string-array>
+
+    <string-array name="decimal_places_entries">
+        <item>2 位</item>
+        <item>4 位</item>
+        <item>6 位</item>
+        <item>8 位</item>
+    </string-array>
+    <string-array name="decimal_places_entry_values">
+        <item>2</item>
+        <item>4</item>
+        <item>6</item>
+        <item>8</item>
+    </string-array>
+
+    <!-- 复数计算器 -->
+    <string name="argument_format">幅角: %1$s°</string>
+    <string name="complex_zero">0 + 0i</string>
+    <string name="complex_a_format">A = %1$s</string>
+    <string name="complex_b_format">B = %1$s</string>
+    <string name="error_calc">计算出错</string>
+    <string name="error_power_n">请输入有效的幂次 n</string>
 </resources>

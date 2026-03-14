@@ -2,15 +2,18 @@ package com.bao.calculator
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.Gravity
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.GravityCompat
+import androidx.core.view.isNotEmpty
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.preference.PreferenceManager
 
 /**
  * 复数科学计算器：支持两个复数 A、B 的四则运算、幂运算、共轭、幅角与极坐标/代数式显示。
@@ -32,6 +35,7 @@ class ComplexCalculatorActivity : AppCompatActivity() {
     private lateinit var tvComplexResult: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        applyThemeFromPreference()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_complex_calculator)
 
@@ -40,9 +44,9 @@ class ComplexCalculatorActivity : AppCompatActivity() {
         navDrawer.post {
             val width = (resources.displayMetrics.widthPixels * 0.75f).toInt()
             val params = (navDrawer.layoutParams as? DrawerLayout.LayoutParams)
-                ?: DrawerLayout.LayoutParams(width, DrawerLayout.LayoutParams.MATCH_PARENT).apply { gravity = Gravity.START }
+                ?: DrawerLayout.LayoutParams(width, DrawerLayout.LayoutParams.MATCH_PARENT).apply { gravity = GravityCompat.START }
             params.width = width
-            params.gravity = Gravity.START
+            params.gravity = GravityCompat.START
             navDrawer.layoutParams = params
         }
 
@@ -50,15 +54,15 @@ class ComplexCalculatorActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         toolbar.setNavigationOnClickListener {
-            drawerLayout.openDrawer(Gravity.START)
+            drawerLayout.openDrawer(GravityCompat.START)
         }
         // 标题栏右侧区域点击也打开抽屉，解决点击无反应
         findViewById<View>(R.id.toolbarTitle)?.setOnClickListener {
-            drawerLayout.openDrawer(Gravity.START)
+            drawerLayout.openDrawer(GravityCompat.START)
         }
         // 扩大左侧菜单图标触摸区域（至少 48dp），提升点击响应
         toolbar.post {
-            if (toolbar.childCount > 0) {
+            if (toolbar.isNotEmpty()) {
                 val navBtn = toolbar.getChildAt(0)
                 val minSize = (48 * resources.displayMetrics.density).toInt()
                 navBtn.minimumWidth = minSize
@@ -87,7 +91,7 @@ class ComplexCalculatorActivity : AppCompatActivity() {
         findViewById<View>(R.id.navItemComplexCalc)?.setOnClickListener {
             clearNavSelection()
             it.isActivated = true
-            drawerLayout.closeDrawer(Gravity.START)
+            drawerLayout.closeDrawer(GravityCompat.START)
         }
         findViewById<View>(R.id.navItemLoan)?.setOnClickListener {
             navTo(LoanCalculatorActivity::class.java)
@@ -108,8 +112,8 @@ class ComplexCalculatorActivity : AppCompatActivity() {
             navTo(DataConverterActivity::class.java)
         }
         findViewById<View>(R.id.navItemSettings)?.setOnClickListener {
-            Toast.makeText(this, "设置功能敬请期待", Toast.LENGTH_SHORT).show()
-            drawerLayout.closeDrawer(Gravity.START)
+            drawerLayout.closeDrawer(GravityCompat.START)
+            startActivity(Intent(this, SettingsActivity::class.java))
         }
     }
 
@@ -124,9 +128,20 @@ class ComplexCalculatorActivity : AppCompatActivity() {
         findViewById<View>(R.id.navItemData)?.isActivated = false
     }
 
+    private fun applyThemeFromPreference() {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        val theme = prefs.getString("theme", "follow_system") ?: "follow_system"
+        val mode = when (theme) {
+            "light" -> AppCompatDelegate.MODE_NIGHT_NO
+            "dark" -> AppCompatDelegate.MODE_NIGHT_YES
+            else -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+        }
+        AppCompatDelegate.setDefaultNightMode(mode)
+    }
+
     private fun navTo(activityClass: Class<*>) {
         clearNavSelection()
-        drawerLayout.closeDrawer(Gravity.START)
+        drawerLayout.closeDrawer(GravityCompat.START)
         startActivity(Intent(this, activityClass))
         finish()
     }
@@ -172,7 +187,7 @@ class ComplexCalculatorActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btnArgument)?.setOnClickListener {
             val a = parseA()
             val deg = a.argumentDegrees()
-            tvComplexResult.text = "幅角: ${formatNum(deg)}°"
+            tvComplexResult.text = getString(R.string.argument_format, formatNum(deg))
         }
         findViewById<Button>(R.id.btnToPolar)?.setOnClickListener {
             tvComplexResult.text = parseA().toPolarString()
@@ -189,7 +204,7 @@ class ComplexCalculatorActivity : AppCompatActivity() {
             etComplexBReal.text.clear()
             etComplexBImag.text.clear()
             etPowerN.text.clear()
-            tvComplexResult.text = "0 + 0i"
+            tvComplexResult.text = getString(R.string.complex_zero)
             refreshABDisplay()
         }
     }
@@ -209,7 +224,7 @@ class ComplexCalculatorActivity : AppCompatActivity() {
             val b = parseB()
             showResult(op(a, b))
         } catch (e: ArithmeticException) {
-            Toast.makeText(this, e.message ?: "计算出错", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, e.message ?: getString(R.string.error_calc), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -218,12 +233,12 @@ class ComplexCalculatorActivity : AppCompatActivity() {
             val a = parseA()
             val nStr = etPowerN.text.toString().trim()
             val n = nStr.toDoubleOrNull() ?: run {
-                Toast.makeText(this, "请输入有效的幂次 n", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.error_power_n), Toast.LENGTH_SHORT).show()
                 return
             }
             showResult(a.pow(n))
         } catch (e: ArithmeticException) {
-            Toast.makeText(this, e.message ?: "计算出错", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, e.message ?: getString(R.string.error_calc), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -232,8 +247,8 @@ class ComplexCalculatorActivity : AppCompatActivity() {
     }
 
     private fun refreshABDisplay() {
-        tvComplexAResult?.text = "A = ${parseA()}"
-        tvComplexBResult?.text = "B = ${parseB()}"
+        tvComplexAResult?.text = getString(R.string.complex_a_format, parseA().toString())
+        tvComplexBResult?.text = getString(R.string.complex_b_format, parseB().toString())
     }
 
     private fun formatNum(x: Double): String {
