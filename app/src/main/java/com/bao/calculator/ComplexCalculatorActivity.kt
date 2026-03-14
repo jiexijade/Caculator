@@ -52,6 +52,19 @@ class ComplexCalculatorActivity : AppCompatActivity() {
         toolbar.setNavigationOnClickListener {
             drawerLayout.openDrawer(Gravity.START)
         }
+        // 标题栏右侧区域点击也打开抽屉，解决点击无反应
+        findViewById<View>(R.id.toolbarTitle)?.setOnClickListener {
+            drawerLayout.openDrawer(Gravity.START)
+        }
+        // 扩大左侧菜单图标触摸区域（至少 48dp），提升点击响应
+        toolbar.post {
+            if (toolbar.childCount > 0) {
+                val navBtn = toolbar.getChildAt(0)
+                val minSize = (48 * resources.displayMetrics.density).toInt()
+                navBtn.minimumWidth = minSize
+                navBtn.minimumHeight = minSize
+            }
+        }
 
         navItemComplexCalc = findViewById(R.id.navItemComplexCalc)
         navItemComplexCalc?.isActivated = true

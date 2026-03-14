@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import android.widget.GridLayout
+import kotlin.math.sqrt
 
 class CalculatorActivity : AppCompatActivity() {
 
@@ -51,6 +52,19 @@ class CalculatorActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
         toolbar.setNavigationOnClickListener {
             drawerLayout.openDrawer(Gravity.START)
+        }
+        // 标题栏右侧“标准模式”区域点击也打开抽屉，解决点击无反应
+        findViewById<View>(R.id.toolbarContent)?.setOnClickListener {
+            drawerLayout.openDrawer(Gravity.START)
+        }
+        // 扩大左侧菜单图标触摸区域（至少 48dp），提升点击响应
+        toolbar.post {
+            if (toolbar.childCount > 0) {
+                val navBtn = toolbar.getChildAt(0)
+                val minSize = (48 * resources.displayMetrics.density).toInt()
+                navBtn.minimumWidth = minSize
+                navBtn.minimumHeight = minSize
+            }
         }
 
         navItemBasicCalc = findViewById(R.id.navItemBasicCalc)
@@ -173,16 +187,20 @@ class CalculatorActivity : AppCompatActivity() {
                             currentExpression.clear()
                             currentExpression.append(key)
                         }
-                        key in listOf("+", "-", "×", "÷", "%", "(", ")", "<<", ">>") -> {
+                        key in listOf("+", "-", "×", "÷", "%", "(", ")", "x²", "√") -> {
                             currentExpression.clear()
-                            currentExpression.append(tvResult.text).append(key)
+                            if (key == "x²") currentExpression.append(tvResult.text).append("²")
+                            else if (key == "√") currentExpression.append("√").append(tvResult.text)
+                            else currentExpression.append(tvResult.text).append(key)
                         }
                         else -> return
                     }
                     justCalculated = false
                 } else {
                     when {
-                        key in listOf("(", ")", "+", "-", "×", "÷", "%", "<<", ">>") -> currentExpression.append(key)
+                        key == "x²" -> currentExpression.append("²")
+                        key == "√" -> currentExpression.append("√")
+                        key in listOf("(", ")", "+", "-", "×", "÷", "%") -> currentExpression.append(key)
                         key == "." -> { if (isDecimalMode) currentExpression.append(key) }
                         key.length == 1 && key[0].isDigit() -> currentExpression.append(key)
                         key.length == 1 && key[0] in 'A'..'F' -> { if (!isDecimalMode) currentExpression.append(key.uppercase()) }
@@ -269,17 +287,30 @@ class CalculatorActivity : AppCompatActivity() {
                 skipSpace()
                 if (i >= s.length) throw RuntimeException("expected factor")
                 when (s[i]) {
+                    '√' -> {
+                        i++
+                        val v = parseFactor()
+                        if (v < 0) throw RuntimeException("sqrt of negative")
+                        return sqrt(v)
+                    }
                     '(' -> {
                         i++
                         val v = parseExpr()
                         skipSpace()
                         if (i >= s.length || s[i] != ')') throw RuntimeException("expected )")
                         i++
+                        skipSpace()
+                        if (i < s.length && s[i] == '²') { i++; return v * v }
                         return v
                     }
                     '-' -> { i++; return -parseFactor() }
                     '+' -> { i++; return parseFactor() }
-                    else -> return parseNumber()
+                    else -> {
+                        val v = parseNumber()
+                        skipSpace()
+                        if (i < s.length && s[i] == '²') { i++; return v * v }
+                        return v
+                    }
                 }
             }
             fun parseTerm(): Double {
@@ -288,8 +319,6 @@ class CalculatorActivity : AppCompatActivity() {
                     skipSpace()
                     if (i >= s.length) break
                     val op = when {
-                        s.startsWith("<<", i) -> { i += 2; "<<" }
-                        s.startsWith(">>", i) -> { i += 2; ">>" }
                         s[i] == '*' -> { i++; "*" }
                         s[i] == '/' -> { i++; "/" }
                         s[i] == '%' -> { i++; "%" }
@@ -300,8 +329,6 @@ class CalculatorActivity : AppCompatActivity() {
                         "*" -> v * b
                         "/" -> if (b == 0.0) throw RuntimeException("divide by zero") else v / b
                         "%" -> v % b
-                        "<<" -> (v.toLong() shl b.toInt().coerceIn(0, 63)).toDouble()
-                        ">>" -> (v.toLong() shr b.toInt().coerceIn(0, 63)).toDouble()
                         else -> v
                     }
                 }
@@ -344,17 +371,30 @@ class CalculatorActivity : AppCompatActivity() {
                 skipSpace()
                 if (i >= s.length) throw RuntimeException("expected factor")
                 when (s[i]) {
+                    '√' -> {
+                        i++
+                        val v = parseFactor()
+                        if (v < 0) throw RuntimeException("sqrt of negative")
+                        return sqrt(v.toDouble()).toLong()
+                    }
                     '(' -> {
                         i++
                         val v = parseExpr()
                         skipSpace()
                         if (i >= s.length || s[i] != ')') throw RuntimeException("expected )")
                         i++
+                        skipSpace()
+                        if (i < s.length && s[i] == '²') { i++; return v * v }
                         return v
                     }
                     '-' -> { i++; return -parseFactor() }
                     '+' -> { i++; return parseFactor() }
-                    else -> return parseHexNumber()
+                    else -> {
+                        val v = parseHexNumber()
+                        skipSpace()
+                        if (i < s.length && s[i] == '²') { i++; return v * v }
+                        return v
+                    }
                 }
             }
             fun parseTerm(): Long {
@@ -363,8 +403,6 @@ class CalculatorActivity : AppCompatActivity() {
                     skipSpace()
                     if (i >= s.length) break
                     val op = when {
-                        s.startsWith("<<", i) -> { i += 2; "<<" }
-                        s.startsWith(">>", i) -> { i += 2; ">>" }
                         s[i] == '*' -> { i++; "*" }
                         s[i] == '/' -> { i++; "/" }
                         s[i] == '%' -> { i++; "%" }
@@ -375,8 +413,6 @@ class CalculatorActivity : AppCompatActivity() {
                         "*" -> v * b
                         "/" -> if (b == 0L) throw RuntimeException("divide by zero") else v / b
                         "%" -> v % b
-                        "<<" -> v shl b.toInt().coerceIn(0, 63)
-                        ">>" -> v shr b.toInt().coerceIn(0, 63)
                         else -> v
                     }
                 }

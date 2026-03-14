@@ -24,9 +24,12 @@
             android:elevation="2dp">
 
             <RelativeLayout
+                android:id="@+id/toolbarContent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingEnd="16dp">
+                android:paddingEnd="16dp"
+                android:clickable="true"
+                android:focusable="true">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -158,10 +161,10 @@
                 <Button android:text="AC" android:textColor="#FFFFFF" android:background="@drawable/btn_eq_premium" app:backgroundTint="@null" style="@style/CalcPremiumBtn" />
                 <Button android:text="DEL" android:textColor="#FFFFFF" android:background="@drawable/btn_eq_premium" app:backgroundTint="@null" style="@style/CalcPremiumBtn" />
 
-                <!-- 第二行：B, <<, >>, %, ÷ -->
+                <!-- 第二行：B, x², √, %, ÷ -->
                 <Button android:text="B" android:textColor="#7A8490" android:background="@drawable/btn_hex_premium" app:backgroundTint="@null" style="@style/CalcPremiumBtn" />
-                <Button android:text="&lt;&lt;" android:textColor="#5A6573" android:background="@drawable/btn_op_premium" app:backgroundTint="@null" style="@style/CalcPremiumBtn" />
-                <Button android:text="&gt;&gt;" android:textColor="#5A6573" android:background="@drawable/btn_op_premium" app:backgroundTint="@null" style="@style/CalcPremiumBtn" />
+                <Button android:text="x²" android:textColor="#5A6573" android:background="@drawable/btn_op_premium" app:backgroundTint="@null" style="@style/CalcPremiumBtn" android:textSize="20sp" />
+                <Button android:text="√" android:textColor="#5A6573" android:background="@drawable/btn_op_premium" app:backgroundTint="@null" style="@style/CalcPremiumBtn" android:textSize="24sp" />
                 <Button android:text="%" android:textColor="#5A6573" android:background="@drawable/btn_op_premium" app:backgroundTint="@null" style="@style/CalcPremiumBtn" />
                 <Button android:text="÷" android:textColor="#5A6573" android:background="@drawable/btn_op_premium" app:backgroundTint="@null" style="@style/CalcPremiumBtn" android:textSize="24sp" />
 
