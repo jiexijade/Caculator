@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- 顶部栏高度（略高于系统默认 56dp，便于点击） -->
+    <dimen name="toolbar_height">72dp</dimen>
     <!-- 导航抽屉默认宽度，代码中会设为屏幕的 3/4 -->
     <dimen name="nav_drawer_width">280dp</dimen>
     <dimen name="nav_section_text_size">12sp</dimen>

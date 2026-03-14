@@ -40,15 +40,27 @@
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/tvMode"
+                <!-- 用容器扩大右上角可点击范围（至少 48dp 触控区域） -->
+                <FrameLayout
+                    android:id="@+id/toolbarRightArea"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:text="标准模式"
-                    android:textColor="#7F8C8D"
-                    android:textSize="14sp" />
+                    android:minWidth="48dp"
+                    android:minHeight="48dp"
+                    android:paddingStart="24dp"
+                    android:paddingEnd="0dp"
+                    android:gravity="end|center_vertical">
+                    <TextView
+                        android:id="@+id/tvMode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end|center_vertical"
+                        android:text="标准模式"
+                        android:textColor="#7F8C8D"
+                        android:textSize="14sp" />
+                </FrameLayout>
             </RelativeLayout>
         </androidx.appcompat.widget.Toolbar>
 

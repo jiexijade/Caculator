@@ -66,6 +66,10 @@ class CalculatorActivity : AppCompatActivity() {
         findViewById<View>(R.id.toolbarContent)?.setOnClickListener {
             drawerLayout.openDrawer(Gravity.START)
         }
+        // 右上角扩大后的触控区域也打开抽屉
+        findViewById<View>(R.id.toolbarRightArea)?.setOnClickListener {
+            drawerLayout.openDrawer(Gravity.START)
+        }
         // 扩大左侧菜单图标触摸区域（至少 48dp），提升点击响应
         toolbar.post {
             if (toolbar.childCount > 0) {
