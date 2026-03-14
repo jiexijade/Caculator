@@ -8,6 +8,7 @@
 
     <!-- 1. 顶部高级感标题栏 (与复数计算器/主计算器完全统一) -->
     <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="#FFFFFF"
@@ -115,11 +116,11 @@
                             android:textColor="#7F8C8D" />
                     </LinearLayout>
 
-                    <!-- 贷款期限 -->
+                    <!-- 贷款年限（单位：年，与设计文档一致） -->
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="贷款期限"
+                        android:text="贷款年限"
                         android:textSize="14sp"
                         android:textColor="#2C3E50"
                         android:textStyle="bold"
@@ -135,11 +136,11 @@
                         android:layout_marginBottom="16dp">
 
                         <EditText
-                            android:id="@+id/etLoanTerm"
+                            android:id="@+id/etYears"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:hint="如: 360"
+                            android:hint="如: 30"
                             android:textColorHint="#A0AAB5"
                             android:textColor="#2C3E50"
                             android:inputType="number"
@@ -149,7 +150,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="月 (1-360)"
+                            android:text="年 (1-30)"
                             android:textSize="14sp"
                             android:textColor="#7F8C8D" />
                     </LinearLayout>
@@ -192,6 +193,26 @@
                             android:textSize="14sp"
                             android:textColor="#7F8C8D" />
                     </LinearLayout>
+
+                    <!-- 贷款类型（展示用，不影响计算公式） -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="贷款类型"
+                        android:textSize="14sp"
+                        android:textColor="#2C3E50"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="8dp" />
+
+                    <Spinner
+                        android:id="@+id/spLoanType"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="@drawable/edit_text_premium"
+                        android:paddingHorizontal="12dp"
+                        android:spinnerMode="dropdown"
+                        android:entries="@array/loan_types"
+                        android:layout_marginBottom="16dp" />
 
                     <!-- 还款方式 -->
                     <TextView

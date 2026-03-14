@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Calculator</string>
+    <string-array name="loan_types">
+        <item>房贷</item>
+        <item>车贷</item>
+    </string-array>
 </resources>
