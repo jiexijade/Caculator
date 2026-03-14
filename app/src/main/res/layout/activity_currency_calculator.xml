@@ -8,6 +8,7 @@
 
     <!-- 1. 顶部高级感标题栏 (与复数计算器完全统一) -->
     <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="#FFFFFF"
@@ -71,11 +72,11 @@
                     android:orientation="vertical"
                     android:padding="20dp">
 
-                    <!-- 美元输入 -->
+                    <!-- 源币种 + 金额输入 -->
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="美国 - 美元"
+                        android:text="从"
                         android:textSize="14sp"
                         android:textColor="#7F8C8D"
                         android:layout_marginBottom="4dp" />
@@ -85,26 +86,28 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
-                        android:layout_marginBottom="20dp">
+                        android:layout_marginBottom="8dp">
 
-                        <TextView
+                        <Spinner
+                            android:id="@+id/spFromCurrency"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="$"
-                            android:textSize="28sp"
-                            android:textColor="#2C3E50"
-                            android:textStyle="bold"
-                            android:layout_marginEnd="8dp" />
+                            android:layout_height="48dp"
+                            android:minWidth="96dp"
+                            android:background="@android:drawable/btn_dropdown"
+                            android:paddingHorizontal="12dp" />
 
                         <EditText
-                            android:id="@+id/etUSD"
+                            android:id="@+id/etCurrencyAmount"
                             android:layout_width="0dp"
                             android:layout_height="56dp"
                             android:layout_weight="1"
-                            android:text="0"
-                            android:textSize="28sp"
+                            android:layout_marginStart="12dp"
+                            android:hint="输入金额"
+                            android:text=""
+                            android:textSize="24sp"
                             android:textColor="#2C3E50"
                             android:inputType="numberDecimal"
+                            android:imeOptions="actionDone"
                             android:background="@null" />
                     </LinearLayout>
 
@@ -112,13 +115,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="#F0F2F5"
-                        android:layout_marginBottom="20dp" />
+                        android:layout_marginVertical="16dp" />
 
-                    <!-- 欧元输入 -->
+                    <!-- 目标币种 + 结果显示 -->
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="欧洲 - 欧元"
+                        android:text="到"
                         android:textSize="14sp"
                         android:textColor="#7F8C8D"
                         android:layout_marginBottom="4dp" />
@@ -128,57 +131,52 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
-                        android:layout_marginBottom="12dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="€"
-                            android:textSize="28sp"
-                            android:textColor="#2C3E50"
-                            android:textStyle="bold"
-                            android:layout_marginEnd="8dp" />
-
-                        <EditText
-                            android:id="@+id/etEUR"
-                            android:layout_width="0dp"
-                            android:layout_height="56dp"
-                            android:layout_weight="1"
-                            android:text="0"
-                            android:textSize="28sp"
-                            android:textColor="#2C3E50"
-                            android:inputType="numberDecimal"
-                            android:background="@null" />
-                    </LinearLayout>
-
-                    <!-- 汇率信息 -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:layout_marginTop="8dp"
                         android:layout_marginBottom="16dp">
 
+                        <Spinner
+                            android:id="@+id/spToCurrency"
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:minWidth="96dp"
+                            android:background="@android:drawable/btn_dropdown"
+                            android:paddingHorizontal="12dp" />
+
                         <TextView
-                            android:id="@+id/tvExchangeRate"
+                            android:id="@+id/tvCurrencyResult"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="1 USD = 0.8647 EUR"
-                            android:textSize="14sp"
-                            android:textColor="#7F8C8D" />
-
-                        <TextView
-                            android:id="@+id/tvUpdateTime"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="已更新 2026/3/9 20:30"
-                            android:textSize="12sp"
-                            android:textColor="#788CA1" />
+                            android:layout_marginStart="12dp"
+                            android:text="0"
+                            android:textSize="24sp"
+                            android:textColor="#2C3E50"
+                            android:textStyle="bold" />
                     </LinearLayout>
 
-                    <!-- 更新汇率按钮 (采用主题统一的深灰蓝色与无阴影设计) -->
+                    <!-- 换算按钮 -->
+                    <Button
+                        android:id="@+id/btnCurrencyConvert"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:text="换算"
+                        android:textSize="16sp"
+                        android:textColor="#FFFFFF"
+                        android:background="@drawable/btn_eq_premium"
+                        app:backgroundTint="@null"
+                        android:stateListAnimator="@null"
+                        android:layout_marginBottom="12dp" />
+
+                    <!-- 汇率信息 -->
+                    <TextView
+                        android:id="@+id/tvExchangeRate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textSize="12sp"
+                        android:textColor="#788CA1"
+                        android:layout_marginBottom="12dp" />
+
+                    <!-- 更新汇率按钮 -->
                     <Button
                         android:id="@+id/btnUpdateRate"
                         android:layout_width="match_parent"
