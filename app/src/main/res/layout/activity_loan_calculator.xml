@@ -70,176 +70,176 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="20dp"
                         android:text="按揭贷款信息"
-                        android:textSize="16sp"
                         android:textColor="#7F8C8D"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="20dp" />
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <!-- 贷款金额 -->
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
                         android:text="贷款金额"
-                        android:textSize="14sp"
                         android:textColor="#2C3E50"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="8dp" />
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
                     <!-- 将 edit_text_premium 赋予外层容器，实现沉浸式输入 -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
+                        android:layout_marginBottom="16dp"
                         android:background="@drawable/edit_text_premium"
-                        android:paddingHorizontal="12dp"
-                        android:layout_marginBottom="16dp">
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="12dp">
 
                         <EditText
                             android:id="@+id/etLoanAmount"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:hint="如: 1000000"
-                            android:textColorHint="#A0AAB5"
-                            android:textColor="#2C3E50"
-                            android:inputType="number"
                             android:background="@null"
+                            android:hint="如: 1000000"
+                            android:inputType="number"
+                            android:textColor="#2C3E50"
+                            android:textColorHint="#A0AAB5"
                             android:textSize="16sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="元"
-                            android:textSize="14sp"
-                            android:textColor="#7F8C8D" />
+                            android:textColor="#7F8C8D"
+                            android:textSize="14sp" />
                     </LinearLayout>
 
                     <!-- 贷款年限（单位：年，与设计文档一致） -->
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
                         android:text="贷款年限"
-                        android:textSize="14sp"
                         android:textColor="#2C3E50"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="8dp" />
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
+                        android:layout_marginBottom="16dp"
                         android:background="@drawable/edit_text_premium"
-                        android:paddingHorizontal="12dp"
-                        android:layout_marginBottom="16dp">
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="12dp">
 
                         <EditText
                             android:id="@+id/etYears"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:hint="如: 30"
-                            android:textColorHint="#A0AAB5"
-                            android:textColor="#2C3E50"
-                            android:inputType="number"
                             android:background="@null"
+                            android:hint="如: 30"
+                            android:inputType="number"
+                            android:textColor="#2C3E50"
+                            android:textColorHint="#A0AAB5"
                             android:textSize="16sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="年 (1-30)"
-                            android:textSize="14sp"
-                            android:textColor="#7F8C8D" />
+                            android:textColor="#7F8C8D"
+                            android:textSize="14sp" />
                     </LinearLayout>
 
                     <!-- 贷款年利率 -->
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
                         android:text="贷款年利率"
-                        android:textSize="14sp"
                         android:textColor="#2C3E50"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="8dp" />
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
+                        android:layout_marginBottom="20dp"
                         android:background="@drawable/edit_text_premium"
-                        android:paddingHorizontal="12dp"
-                        android:layout_marginBottom="20dp">
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="12dp">
 
                         <EditText
                             android:id="@+id/etLoanRate"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:hint="如: 3.1"
-                            android:textColorHint="#A0AAB5"
-                            android:textColor="#2C3E50"
-                            android:inputType="numberDecimal"
                             android:background="@null"
+                            android:hint="如: 3.1"
+                            android:inputType="numberDecimal"
+                            android:textColor="#2C3E50"
+                            android:textColorHint="#A0AAB5"
                             android:textSize="16sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="%"
-                            android:textSize="14sp"
-                            android:textColor="#7F8C8D" />
+                            android:textColor="#7F8C8D"
+                            android:textSize="14sp" />
                     </LinearLayout>
 
                     <!-- 贷款类型（展示用，不影响计算公式） -->
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
                         android:text="贷款类型"
-                        android:textSize="14sp"
                         android:textColor="#2C3E50"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="8dp" />
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
                     <Spinner
                         android:id="@+id/spLoanType"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
+                        android:layout_marginBottom="16dp"
                         android:background="@drawable/edit_text_premium"
-                        android:paddingHorizontal="12dp"
-                        android:spinnerMode="dropdown"
                         android:entries="@array/loan_types"
-                        android:layout_marginBottom="16dp" />
+                        android:paddingHorizontal="12dp"
+                        android:spinnerMode="dropdown" />
 
                     <!-- 还款方式 -->
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
                         android:text="还款方式"
-                        android:textSize="14sp"
                         android:textColor="#2C3E50"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="8dp" />
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
                     <RadioGroup
                         android:id="@+id/rgRepaymentMethod"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="24dp">
+                        android:layout_marginBottom="24dp"
+                        android:orientation="horizontal">
 
                         <RadioButton
                             android:id="@+id/rbEqualInstallment"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:checked="true"
                             android:text=" 等额本息"
-                            android:textSize="14sp"
                             android:textColor="#5A6573"
-                            android:checked="true" />
+                            android:textSize="14sp" />
 
                         <RadioButton
                             android:id="@+id/rbEqualPrincipal"
@@ -247,8 +247,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text=" 等额本金"
-                            android:textSize="14sp"
-                            android:textColor="#5A6573" />
+                            android:textColor="#5A6573"
+                            android:textSize="14sp" />
                     </RadioGroup>
 
                     <!-- 计算按钮 -->
@@ -256,12 +256,12 @@
                         android:id="@+id/btnLoanCalculate"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
-                        android:text="开始智能计算"
-                        android:textSize="16sp"
-                        android:textColor="#FFFFFF"
                         android:background="@drawable/btn_eq_premium"
-                        app:backgroundTint="@null"
-                        android:stateListAnimator="@null" />
+                        android:stateListAnimator="@null"
+                        android:text="开始智能计算"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp"
+                        app:backgroundTint="@null" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -283,11 +283,11 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
                         android:text="计算结果"
                         android:textSize="16sp"
                         android:textColor="#7F8C8D"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="16dp" />
+                        android:textStyle="bold" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -423,15 +423,32 @@
                     android:paddingTop="20dp"
                     android:paddingBottom="12dp">
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="还款明细清单"
-                        android:textSize="16sp"
-                        android:textColor="#7F8C8D"
-                        android:textStyle="bold"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
                         android:paddingHorizontal="20dp"
-                        android:layout_marginBottom="16dp" />
+                        android:layout_marginBottom="16dp">
+
+                        <ImageButton
+                            android:id="@+id/btnExportCsv"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/ic_export"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:contentDescription="导出还款明细为 CSV"
+                            android:padding="8dp"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="还款明细清单"
+                            android:textSize="16sp"
+                            android:textColor="#7F8C8D"
+                            android:textStyle="bold" />
+                    </LinearLayout>
 
                     <HorizontalScrollView
                         android:layout_width="match_parent"

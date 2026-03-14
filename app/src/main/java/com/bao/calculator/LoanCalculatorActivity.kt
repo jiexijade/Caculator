@@ -1,14 +1,21 @@
 package com.bao.calculator
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
 import android.view.Gravity
+import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.FileProvider
+import java.io.File
 import java.util.Locale
 
 /**
@@ -28,6 +35,10 @@ class LoanCalculatorActivity : AppCompatActivity() {
     private lateinit var tvTotalPayment: TextView
     private lateinit var tvAIAnalysis: TextView
     private lateinit var layoutRepaymentDetails: LinearLayout
+    private lateinit var btnExportCsv: ImageButton
+
+    /** 最近一次计算的还款计划，用于导出 CSV */
+    private var lastSchedule: List<LoanScheduleRow> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +59,7 @@ class LoanCalculatorActivity : AppCompatActivity() {
         tvTotalPayment = findViewById(R.id.tvTotalPayment)
         tvAIAnalysis = findViewById(R.id.tvAIAnalysis)
         layoutRepaymentDetails = findViewById(R.id.layoutRepaymentDetails)
+        btnExportCsv = findViewById(R.id.btnExportCsv)
     }
 
     private fun setupToolbar() {
@@ -60,6 +72,7 @@ class LoanCalculatorActivity : AppCompatActivity() {
 
     private fun setupCalculateButton() {
         btnLoanCalculate.setOnClickListener { doCalculate() }
+        btnExportCsv.setOnClickListener { exportScheduleToCsv() }
     }
 
     private fun doCalculate() {
@@ -107,7 +120,59 @@ class LoanCalculatorActivity : AppCompatActivity() {
             "等额本金方式前期月供较高、逐月递减，总利息更少，适合当前收入较高、希望减轻长期负担的借款人。"
         }
 
+        lastSchedule = result.schedule
+        btnExportCsv.visibility = if (result.schedule.isEmpty()) View.GONE else View.VISIBLE
         fillRepaymentDetails(result.schedule)
+    }
+
+    /** 导出全部期数还款明细为 CSV，并通过系统分享/保存 */
+    private fun exportScheduleToCsv() {
+        if (lastSchedule.isEmpty()) {
+            Toast.makeText(this, "暂无还款明细可导出", Toast.LENGTH_SHORT).show()
+            return
+        }
+        val sb = StringBuilder()
+        sb.append("\uFEFF") // UTF-8 BOM，便于 Excel 正确识别中文
+        sb.append("期数,月供(元),本金(元),利息(元),剩余本金(元)\n")
+        for (row in lastSchedule) {
+            sb.append(row.period).append(",")
+            sb.append(String.format(Locale.US, "%.2f", row.payment)).append(",")
+            sb.append(String.format(Locale.US, "%.2f", row.principal)).append(",")
+            sb.append(String.format(Locale.US, "%.2f", row.interest)).append(",")
+            sb.append(String.format(Locale.US, "%.2f", row.remaining)).append("\n")
+        }
+        val fileName = "还款明细_${System.currentTimeMillis()}.csv"
+        val file = File(cacheDir, fileName)
+        try {
+            file.writeText(sb.toString(), Charsets.UTF_8)
+            val uri: Uri = FileProvider.getUriForFile(
+                this,
+                "${packageName}.fileprovider",
+                file
+            )
+            AlertDialog.Builder(this)
+                .setTitle("导出还款明细")
+                .setMessage("选择「用表格应用打开」可直接查看 CSV 表格；选择「分享」可保存或发送文件。")
+                .setPositiveButton("用表格应用打开") { _, _ ->
+                    val viewIntent = Intent(Intent.ACTION_VIEW).apply {
+                        setDataAndType(uri, "text/csv")
+                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    }
+                    startActivity(Intent.createChooser(viewIntent, "用以下应用打开 CSV"))
+                }
+                .setNegativeButton("分享") { _, _ ->
+                    val sendIntent = Intent(Intent.ACTION_SEND).apply {
+                        type = "text/csv"
+                        putExtra(Intent.EXTRA_STREAM, uri)
+                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    }
+                    startActivity(Intent.createChooser(sendIntent, "分享到"))
+                }
+                .setNeutralButton("取消", null)
+                .show()
+        } catch (e: Exception) {
+            Toast.makeText(this, "导出失败：${e.message}", Toast.LENGTH_SHORT).show()
+        }
     }
 
     /** 填充还款明细表（展示前 12 期 + … + 最后 3 期，避免视图过多） */
